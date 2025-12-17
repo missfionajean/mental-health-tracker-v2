@@ -44,10 +44,19 @@
 }
 
 .day-circle {
-    background-color: gray;
-    border-radius: 15px;
-    width: 2em;
-    height: 2em;
+    border-radius: 20px;
+    width: 2.5em;
+    height: 2.5em;
     align-content: center;
     text-align: center;
+}
+
+.day-circle-today {
+    border-radius: 20px;
+    width: 2.5em;
+    height: 2.5em;
+    align-content: center;
+    text-align: center;
+    border: 4px solid #646cff;
+    font-weight: bold;
 }

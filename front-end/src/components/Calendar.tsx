@@ -5,6 +5,7 @@
 
 import "./Calendar.css";
 import { useState } from "react";
+import sampleMonthData from "./SampleMonthData";
 
 export default function Calendar() {
 	// variables for dynamic calendar rendering
@@ -30,7 +31,7 @@ export default function Calendar() {
 	const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth());
 	const [currentYear, setCurrentYear] = useState(currentDate.getFullYear());
 
-    // state variable for selected date
+    // state variable for selected date (may need to be lifted to parent component)
     const [selectedDate, setSelectedDate] = useState<Date | null>(currentDate);
 
 	// creates date object to get no. of days in month
@@ -59,13 +60,14 @@ export default function Calendar() {
         // create new date object based on clicked day
         const clickedDate = new Date(currentYear, currentMonth, day);
         setSelectedDate(clickedDate);
-        console.log("Selected date:", clickedDate);
+        // debugging log for clicked date
+        // console.log("Selected date:", clickedDate);
     };
 
-	// debugging log for date grabbing
-	console.log(currentMonth, currentYear, currentDate);
-	console.log("Days in month:", daysInMonth);
-	console.log("First day of month:", firstDayOfMonth);
+	// debugging logs for date objects
+    console.log("GetDate:", currentDate.getDate());
+    console.log("GetMonth:", currentDate.getMonth());
+    console.log("GetFullYear:", currentDate.getFullYear());
 
 	return (
 		<div className="full-calendar">
@@ -102,6 +104,17 @@ export default function Calendar() {
 							currentYear === currentDate.getFullYear()
 								? "day-circle-today"
 								: "day-circle"
+						}
+						// adds CSS colors for days with data, gray if none
+						style={
+							sampleMonthData[
+								`${currentYear.toString()}-${(currentMonth + 1).toString().padStart(2, "0")}-${(day + 1).toString().padStart(2, "0")}` as keyof typeof sampleMonthData
+							] ?
+                            // this will need to be turned into a function above (or in a separate utils file)
+							// { background: "linear-gradient(90deg, red, green, blue)" }
+                            {background: "conic-gradient(red, green, blue)"}
+                            :
+							{ backgroundColor: "gray" }
 						}
                         // add 1 because days are 0 indexed
                         onClick={() => handleDayClick(day + 1)}
