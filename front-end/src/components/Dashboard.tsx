@@ -12,8 +12,8 @@ function Dashboard() {
 				justifyContent: "center",
 				alignItems: "center",
 				height: "100vh",
-				backgroundColor: "black",
-				paddingBlock: "10px",
+                width: "100vw",
+				backgroundColor: "black"
 			}}
 		>
 			<Calendar />

@@ -1,3 +1,9 @@
+// this will hold the image carousel that holds all eight emotions and rotates around a center point that holds the currently selected color(s)
+// let them choose up to three emotions at a time, rendering gradient in order chosen (always append new emtion to the end of the array if there's not already three)
+// if an emotion is not highlighted, clicking will add it to the array; if it is highlighted, clicking will remove it from the array
+// therefore, it will always render the gradient in the order of the emotions chosen
+// if no emotion is chosen, render a default color (gray like an unfilled day in the calendar above)
+
 import React, { useRef, useState } from "react";
 
 /* =========================
@@ -9,7 +15,7 @@ type SpinnerImage = {
   src: string; // path from /public
 };
 
-type HalfCircleImageSpinnerProps = {
+type EmotionWheelProps = {
   images: SpinnerImage[];
   selected: SpinnerImage[];
   setSelected: React.Dispatch<React.SetStateAction<SpinnerImage[]>>;
@@ -28,18 +34,18 @@ const normalize = (deg: number) => ((deg % 360) + 360) % 360;
    Spinner Component
 ========================= */
 
-export const HalfCircleImageSpinner: React.FC<HalfCircleImageSpinnerProps> = ({
+const EmotionWheel: React.FC<EmotionWheelProps> = ({
   images,
   selected,
   setSelected,
-  radius = 160,
+  radius = 150,
 }) => {
   const [rotation, setRotation] = useState(0);
 
   const isDragging = useRef(false);
   const lastX = useRef(0);
 
-  const step = 180 / (images.length - 1);
+  const step = 360 / (images.length - 1);
 
   /* -------------------------
      Pointer / Touch Handlers
@@ -77,11 +83,12 @@ export const HalfCircleImageSpinner: React.FC<HalfCircleImageSpinnerProps> = ({
       onPointerLeave={onPointerUp}
       style={{
         position: "relative",
-        width: radius * 2,
+        width: "100dvw",
         height: radius,
         overflow: "hidden",
         touchAction: "none",
         userSelect: "none",
+        alignSelf: "center",
       }}
     >
       {images.map((img, index) => {
@@ -147,12 +154,12 @@ const IMAGES: SpinnerImage[] = [
   { id: "8", src: "8.png" },
 ];
 
-export default function HalfCircleSpinnerDemo() {
+export default function EmotionPicker() {
   const [selected, setSelected] = useState<SpinnerImage[]>([]);
 
   return (
     <div style={{ padding: 24 }}>
-      <HalfCircleImageSpinner
+      <EmotionWheel
         images={IMAGES}
         selected={selected}
         setSelected={setSelected}
