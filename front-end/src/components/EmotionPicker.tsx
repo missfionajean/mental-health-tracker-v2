@@ -158,12 +158,10 @@ export default function EmotionPicker() {
   const [selected, setSelected] = useState<SpinnerImage[]>([]);
 
   return (
-    <div style={{ padding: 24 }}>
       <EmotionWheel
         images={IMAGES}
         selected={selected}
         setSelected={setSelected}
       />
-    </div>
   );
 }

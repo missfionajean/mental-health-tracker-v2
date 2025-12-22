@@ -1,14 +1,22 @@
 // this will hold the emotion wheel, notes and buttons
 // try using the react bits circular gallery widget for the emotion wheel
 // import EmotionWheel from "./EmotionWheel";
-import EmotionWheelComponent from "./EmotionPicker";
+import EmotionPicker from "./EmotionPicker";
 
 export default function DayTray() {
 	return (
-		<>
+		<div
+			className="day-tray"
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				justifyContent: "center"
+			}}
+		>
 			{/* wheel needs to be in its own file */}
-			<EmotionWheelComponent />
-			
+			<EmotionPicker />
+
 			{/* <div
 				style={{
 					height: "20px",
@@ -22,9 +30,6 @@ export default function DayTray() {
 			<textarea
 				className="notes-input"
 				style={{
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
 					border: "1px solid white",
 					width: "320px",
 					height: "75px",
@@ -69,6 +74,6 @@ export default function DayTray() {
 					Save
 				</button>
 			</div>
-		</>
+		</div>
 	);
 }
