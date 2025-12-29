@@ -13,10 +13,16 @@ function Dashboard() {
 				alignItems: "center",
 				height: "100vh",
                 width: "100vw",
-				backgroundColor: "black"
+				backgroundColor: "black",
 			}}
 		>
+            <div
+            style={{
+                border: "1px solid white",
+            }}
+            >
 			<Calendar />
+            </div>
 			<DayTray />
 		</div>
 	);

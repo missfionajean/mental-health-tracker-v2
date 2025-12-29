@@ -11,7 +11,7 @@ export default function DayTray() {
 				display: "flex",
 				flexDirection: "column",
 				alignItems: "center",
-				justifyContent: "center"
+				justifyContent: "center",
 			}}
 		>
 			{/* wheel needs to be in its own file */}
