@@ -1,9 +1,13 @@
 // this will hold the emotion wheel, notes and buttons
 // try using the react bits circular gallery widget for the emotion wheel
 // import EmotionWheel from "./EmotionWheel";
+import { useState } from "react";
 import EmotionPicker from "./EmotionPicker";
 
 export default function DayTray() {
+    // state variables for notes field
+    const [notes, setNotes] = useState("");
+
 	return (
 		<div
 			className="day-tray"
@@ -26,11 +30,13 @@ export default function DayTray() {
 					height: "75px",
 					color: "white",
 					padding: "10px",
-                    marginTop: "0.2em",
-                    marginBottom: "0.5em",
-                    borderRadius: "10px",
+					marginTop: "0.2em",
+					marginBottom: "0.5em",
+					borderRadius: "10px",
 				}}
 				placeholder={"Add a note here (Optional)"}
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
 			/>
 
 			{/* daily edit button container */}
@@ -46,7 +52,7 @@ export default function DayTray() {
 			>
 				<button
 					style={{
-						backgroundColor: "gray",
+						backgroundColor: "dimgray",
 						height: "50px",
 						width: "120px",
 						borderRadius: "10px",

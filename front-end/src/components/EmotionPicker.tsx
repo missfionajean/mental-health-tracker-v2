@@ -39,10 +39,11 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({
 	const isDragging = useRef(false);
 	const lastX = useRef(0);
 
+	// circle dimensions and reusable diameter variable
 	const step = 360 / images.length;
-	const size = radius * 2;
+	const diameter = radius * 2;
 
-	/* Pointer / Touch Handlers */
+	/* Pointer & Touch Handlers */
 
 	const onPointerDown = (e: React.PointerEvent) => {
 		isDragging.current = true;
@@ -62,16 +63,79 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({
 
 	/* Selection Logic */
 
+	// controls which images in wheel are selected
 	const addImage = (img: SpinnerImage) => {
-		setSelected((prev) =>
-			prev.some((i) => i.id === img.id) ? prev : [...prev, img]
-		);
+		setSelected((prev) => {
+			const alreadySelected = prev.some((i) => i.id === img.id);
+
+			// deselection logic
+			if (alreadySelected) {
+				return prev.filter((i) => i.id !== img.id);
+			}
+
+			// quick check to ensure max of three selections
+			if (prev.length >= 3) {
+				return prev;
+			}
+
+			// defaults to adding new image if other checks fail
+			console.log(prev);
+			return [...prev, img];
+		});
 	};
+
+	/* Prototype of color rendering logic */
+	const colors: Record<string, string> = {
+		"1": "#8EC83F",
+		"2": "#00A874",
+		"3": "#02AFEF",
+		"4": "#0054A7",
+		"5": "#94278F",
+		"6": "#EE0873",
+		"7": "#EC1D25",
+		"8": "#FFC40F",
+	};
+
+	const colorPreview =
+		selected.length >= 1
+			? (() => {
+					// defines number of selected emotions and portion of circle each will take up
+					const n = selected.length;
+					const portion = 180 / n;
+
+					// returns conic-gradient string based on selected emotions
+					return `conic-gradient(
+          from -90deg at 50% 50%,
+          ${selected
+                // uses index to calculate start and end angles for each color portion
+				.map((img, i) => {
+					const start = i * portion;
+					const end = (i + 1) * portion;
+
+					const nextColor =
+						colors[selected[(i + 1) % n]?.id] ?? colors[img.id];
+
+					// blend logic
+					const blend = 0;
+					const blendEnd = end - blend;
+
+					return `
+                ${colors[img.id]} ${start}deg,
+                ${colors[img.id]} ${blendEnd}deg,
+                ${nextColor} ${end}deg
+              `;
+				})
+				.join(", ")},
+          transparent 180deg,
+          transparent 360deg
+        )`;
+			  })()
+			: "dimgray";
 
 	return (
 		<div
 			style={{
-				width: size + 64,
+				width: diameter + 64,
 				height: radius + 32,
 				overflow: "hidden",
 				margin: "0 auto",
@@ -79,7 +143,7 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({
 				// border: "1px solid white",
 			}}
 		>
-            {/* Preview Gradient */}
+			{/* Preview Gradient */}
 			<div
 				style={{
 					position: "absolute",
@@ -87,21 +151,22 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({
 					left: radius + 32,
 					width: 172,
 					height: 172,
+					background: colorPreview,
+					clipPath: "inset(0 0 50% 0)",
 					borderRadius: "50%",
-					background: "dimgray",
 					transform: "translate(-50%, -50%)",
 					zIndex: 1,
 					pointerEvents: "none",
-                    textAlign: "center",
-                    lineHeight: "96px",
-                    fontSize: "3.5em",
-                    color: "white",
+					textAlign: "center",
+					lineHeight: "96px",
+					fontSize: "3.5em",
+					color: "white",
 				}}
 			>
-                30
-            </div>
+				30
+			</div>
 
-            {/* Spinning Wheel */}
+			{/* Spinning Wheel */}
 			<div
 				onPointerDown={onPointerDown}
 				onPointerMove={onPointerMove}
@@ -111,11 +176,11 @@ const EmotionWheel: React.FC<EmotionWheelProps> = ({
 					position: "absolute",
 					top: 32,
 					left: 32,
-					width: size,
-					height: size,
+					width: diameter,
+					height: diameter,
 					touchAction: "none",
 					userSelect: "none",
-                    zIndex: 0,
+					zIndex: 0,
 				}}
 			>
 				{images.map((img, index) => {
